@@ -1,0 +1,11 @@
+name: ManhuntPlugin
+version: '${project.version}'
+main: newamazingpvp.manhuntplugin.ManhuntPlugin
+api-version: '1.21'
+folia-supported: true
+commands:
+    manhunt:
+        description: Manhunt command
+        usage: /manhunt <start|stop>
+        permission: manhunt.command
+        aliases: [mh]
