@@ -2,10 +2,15 @@ package newamazingpvp.manhuntplugin;
 
 import newamazingpvp.manhuntplugin.ManhuntPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +50,17 @@ public class ManhuntCommand implements CommandExecutor {
                     player.sendMessage("No game is currently in progress.");
                     return true;
                 }
+                if(Bukkit.getOnlinePlayers().size() > 1) {
+                    player.sendMessage("You can't end the game while there are still players online.");
+                    return true;
+                }
                 plugin.endGame(null);
                 break;
             case "list":
                 listPlayers(player);
                 break;
+            case "compass":
+                addItemOrDrop(player, new ItemStack(Material.COMPASS), "Your inventory is full. The compass has been dropped on the ground.");
             default:
                 sendUsage(player);
                 break;
@@ -58,28 +69,39 @@ public class ManhuntCommand implements CommandExecutor {
         return true;
     }
 
+    public void addItemOrDrop(Player player, ItemStack itemStack, String fullInventoryMessage) {
+        if (player.getInventory().firstEmpty() != -1) {
+            player.getInventory().addItem(itemStack);
+        } else {
+            World world = player.getWorld();
+            world.dropItem(player.getLocation(), itemStack);
+            player.sendMessage(ChatColor.GRAY + fullInventoryMessage);
+        }
+    }
+
     private void sendUsage(Player player) {
         player.sendMessage("Usage:");
-        player.sendMessage("/manhunt start <hunter1,hunter2...> <runner1,runner2...>");
+        player.sendMessage("/manhunt start <hunter1,hunter2...> <runner>");
         player.sendMessage("/manhunt end");
         player.sendMessage("/manhunt list");
+        player.sendMessage("/manhunt compass");
     }
 
     private void startGame(Player player, String[] args) {
         if (args.length != 3) {
-            player.sendMessage("Usage: /manhunt start <hunter1,hunter2...> <runner1,runner2...>");
+            player.sendMessage("Usage: /manhunt start <hunter1,hunter2...> <runner>");
             return;
         }
 
         List<Player> hunters = getPlayers(args[1]);
-        List<Player> runners = getPlayers(args[2]);
+        Player runner = Bukkit.getPlayer(args[2]);
 
-        if (hunters.isEmpty() || runners.isEmpty()) {
+        if (hunters.isEmpty() || runner == null) {
             player.sendMessage("Invalid player names. Make sure all players are online.");
             return;
         }
 
-        plugin.startGame(hunters, runners);
+        plugin.startGame(hunters, runner);
     }
 
     private List<Player> getPlayers(String names) {
@@ -100,7 +122,7 @@ public class ManhuntCommand implements CommandExecutor {
         }
 
         player.sendMessage("Hunters: " + getPlayerNames(plugin.getHunters()));
-        player.sendMessage("Runners: " + getPlayerNames(plugin.getRunners()));
+        player.sendMessage("Runner: " + plugin.getRunner());
     }
 
     private String getPlayerNames(List<Player> players) {
