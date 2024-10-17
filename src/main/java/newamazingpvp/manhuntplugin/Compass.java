@@ -1,5 +1,6 @@
 package newamazingpvp.manhuntplugin;
 
+import io.papermc.paper.event.entity.EntityPortalReadyEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -9,6 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.entity.EntityPortalExitEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
@@ -34,8 +39,11 @@ public class Compass implements Listener {
 
     @EventHandler
     public void onPlayerPortalEvent(PlayerPortalEvent event) {
+        //this doesnt work on folia, but it works on paper so remove lines from compass update for paper
         lastPortalLocations.put(event.getPlayer().getUniqueId(), event.getFrom());
     }
+
+
     public void compassUpdate() {
         compassTask = new BukkitRunnable() {
             public void run() {
@@ -60,11 +68,15 @@ public class Compass implements Listener {
                     if (player.getWorld().getEnvironment() == World.Environment.NORMAL && target.getWorld().getEnvironment() == World.Environment.NORMAL) {
                         setNormalCompass(compass);
                         player.setCompassTarget(target.getLocation());
+                        //below line only for folia (remove for paper)
+                        lastPortalLocations.put(target.getUniqueId(), target.getLocation());
                     } else if (player.getWorld().getEnvironment() == target.getWorld().getEnvironment()) {
                         setLodestoneCompass(compass, target.getLocation());
+                        //below line only for folia (remove for paper)
+                        lastPortalLocations.put(target.getUniqueId(), target.getLocation());
                     } else {
                         Location targetLocation = lastPortalLocations.get(target.getUniqueId());
-                        if (targetLocation != null && player.getWorld() == targetLocation.getWorld()) {
+                        if (targetLocation != null && player.getWorld().getEnvironment() == targetLocation.getWorld().getEnvironment()) {
                             setLodestoneCompass(compass, targetLocation);
                         } else {
                             msg = ChatColor.RED + "Cannot track player because they are in a different dimension and haven't used a portal yet";
@@ -75,6 +87,7 @@ public class Compass implements Listener {
                 }
             }
         }.runTaskTimer(plugin, 0L, 20L);
+
     }
 
     public void setTrackingPlayers(UUID playerUUID, UUID targetUUID) {
@@ -92,19 +105,14 @@ public class Compass implements Listener {
 
     private void setNormalCompass(ItemStack compass) {
         CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
-        assert compassMeta != null;
-        if (compassMeta.isLodestoneTracked()) {
-            compassMeta.setLodestone(null);
-            compassMeta.setLodestoneTracked(false);
-            compass.setItemMeta(compassMeta);
-        }
+        compassMeta = null;
+        compass.setItemMeta(compassMeta);
     }
 
     private void setLodestoneCompass(ItemStack compass, Location location) {
         CompassMeta compassMeta = (CompassMeta) compass.getItemMeta();
-        assert compassMeta != null;
         compassMeta.setLodestone(location);
-        compassMeta.setLodestoneTracked(true);
+        compassMeta.setLodestoneTracked(false);
         compass.setItemMeta(compassMeta);
     }
 }

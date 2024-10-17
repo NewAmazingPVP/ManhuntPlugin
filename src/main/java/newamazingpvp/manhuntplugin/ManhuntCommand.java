@@ -15,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static newamazingpvp.manhuntplugin.WorldManager.regenerateWorlds;
+
 public class ManhuntCommand implements CommandExecutor {
 
     private final ManhuntPlugin plugin;
@@ -61,6 +63,14 @@ public class ManhuntCommand implements CommandExecutor {
                 break;
             case "compass":
                 addItemOrDrop(player, new ItemStack(Material.COMPASS), "Your inventory is full. The compass has been dropped on the ground.");
+                break;
+            case "regen":
+                if (plugin.isGameInProgress()) {
+                    player.sendMessage("You can't regenerate the world while a game is in progress.");
+                    return true;
+                }
+                regenerateWorlds();
+                break;
             default:
                 sendUsage(player);
                 break;

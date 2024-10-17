@@ -42,8 +42,8 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
         gameInProgress = false;
         String message = (winnerType != null) ? winnerType + " have won the game!" : "The game has ended.";
         Bukkit.broadcastMessage(ChatColor.GOLD + message);
-
-        getServer().getGlobalRegionScheduler().runDelayed(this, (task) -> regenerateWorlds(), 100);
+        Bukkit.broadcastMessage(ChatColor.GREEN + "You can regenerate the world for the next game by doing " + ChatColor.GOLD + "/manhunt regen" + ChatColor.GREEN + " or it wait for it to automatically in 10 minutes");
+        getServer().getGlobalRegionScheduler().runDelayed(this, (task) -> regenerateWorlds(), 20 * 60 * 10);
     }
 
     @EventHandler
