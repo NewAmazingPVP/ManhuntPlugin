@@ -1,14 +1,9 @@
 package newamazingpvp.manhuntplugin;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-
-import static org.bukkit.Bukkit.getLogger;
+import java.io.File;
 import static org.bukkit.Bukkit.getServer;
 
 public class WorldManager {
@@ -19,33 +14,19 @@ public class WorldManager {
             player.kickPlayer("World is regenerating. Please rejoin in a few minutes.");
         }
 
-        forceDeleteWorldFolder("world");
-        forceDeleteWorldFolder("world_nether");
-        forceDeleteWorldFolder("world_the_end");
-        getServer().shutdown();
-
-        Bukkit.broadcastMessage("Worlds have been regenerated. Players can now rejoin.");
-    }
-
-    private static void forceDeleteWorldFolder(String worldName) {
-        Path worldPath = Paths.get(Bukkit.getWorldContainer().getAbsolutePath(), worldName);
         try {
-            Files.walkFileTree(worldPath, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
-                }
+            File script = new File("/home/ubuntu/Folia/deleteFolders.sh");
 
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                    Files.delete(dir);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } catch (IOException e) {
-            getLogger().severe("Failed to delete world folder: " + worldName);
+            ProcessBuilder builder = new ProcessBuilder("/bin/bash", script.getAbsolutePath());
+            builder.redirectErrorStream(true);
+
+            builder.directory(new File("/home/ubuntu/Folia/"));
+
+            Process process = builder.start();
+            process.waitFor();
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        getServer().shutdown();
     }
 }

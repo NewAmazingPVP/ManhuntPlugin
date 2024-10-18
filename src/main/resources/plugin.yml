@@ -7,5 +7,4 @@ commands:
     manhunt:
         description: Manhunt command
         usage: /manhunt <start|end|list|compass>
-        permission: manhunt.command
         aliases: [mh]
