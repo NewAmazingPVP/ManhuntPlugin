@@ -73,7 +73,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
-        if (gameInProgress && !hunters.contains(event.getPlayer()) && !event.getPlayer().equals(runner)) {
+        if (gameInProgress && !hunters.contains(event.getPlayer()) && !event.getPlayer().equals(runner) && !Bukkit.getWhitelistedPlayers().contains(event.getPlayer().getName())) {
             event.getPlayer().kickPlayer(ChatColor.RED + "A manhunt game is currently in progress. Please wait for the next game or ask them to /manhunt add you.");
         } else {
             Bukkit.dispatchCommand(event.getPlayer(), "manhunt");
@@ -97,7 +97,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
         hunters = new ArrayList<>(newHunters);
         runner = newRunner;
         runner.setMaxHealth(runnerMaxHealth*2.0);
-
+        runner.setHealth(runner.getMaxHealth());
         gameInProgress = true;
         compass.playerLastLocation.addTrackingPlayer(runner);
 
@@ -109,7 +109,14 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
         for (Player hunter : hunters) {
             hunter.getInventory().addItem(new ItemStack(Material.COMPASS));
             hunter.setMaxHealth(hunterMaxHealth*2.0);
+            hunter.setHealth(hunter.getMaxHealth());
             compass.setTrackingPlayers(hunter.getUniqueId(), runner.getUniqueId());
+        }
+
+        for (Player p: Bukkit.getOnlinePlayers()) {
+            if (!hunters.contains(event.getPlayer()) && !event.getPlayer().equals(runner) && !Bukkit.getWhitelistedPlayers().contains(event.getPlayer().getName())) {
+                event.getPlayer().kickPlayer(ChatColor.RED + "A manhunt game is currently in progress. Please wait for the next game or ask them to /manhunt add you.");
+            }
         }
 
         Bukkit.broadcastMessage("Manhunt game has started!");

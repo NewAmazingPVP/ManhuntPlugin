@@ -154,18 +154,18 @@ public class ManhuntCommand implements CommandExecutor {
     }
 
     private void sendUsage(Player player) {
-        player.sendMessage("Usage:");
-        player.sendMessage("/manhunt start <hunter1,hunter2...> <runner>");
-        player.sendMessage("/manhunt end");
-        player.sendMessage("/manhunt list");
-        player.sendMessage("/manhunt compass");
-        player.sendMessage("/manhunt add <hunter>");
-        player.sendMessage("/manhunt remove <hunter>");
-        player.sendMessage("/manhunt piglinDrop %");
-        player.sendMessage("/manhunt setMaxHealth runner <health>");
-        player.sendMessage("/manhunt setMaxHealth hunter <health>");
-        player.sendMessage("/manhunt setResistance runner %");
-        player.sendMessage("/manhunt setResistance hunter %");
+        player.sendMessage(ChatColor.GOLD + "Usage:");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "start <hunter1,hunter2...> <runner>" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Starts a new manhunt game.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "end" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Ends the current manhunt game.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "list" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Lists all players in the current game.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "compass" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Gives a compass to the player.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "add <hunter>" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Adds a player as a hunter.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "remove <hunter>" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Removes a player from hunters.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "piglinDrop %" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the piglin drop rate for enderpearls, in percentage. 0 is normal rate, and 100 is always drops enderpearls.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "setMaxHealth runner <health>" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the max health for the runner.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "setMaxHealth hunter <health>" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the max health for the hunters.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "setResistance runner %" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the resistance % from damage for the runner.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "setResistance hunter %" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the resistance % from damage for the hunters.");
     }
 
     private void startGame(Player player, String[] args) {

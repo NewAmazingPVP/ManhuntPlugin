@@ -1,5 +1,6 @@
 package newamazingpvp.manhuntplugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -28,14 +29,16 @@ public class ManhuntTabCompleter implements TabCompleter {
                 case "piglindrop":
                     return Arrays.asList("%");
                 default:
-                    return new ArrayList<>();
+                    return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("setmaxhealth") || args[0].equalsIgnoreCase("setresistance")) {
                 return Arrays.asList("<value>");
+            } else {
+                return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             }
         }
-        return new ArrayList<>();
+        return new Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
     }
 
     private List<String> filterSuggestions(List<String> suggestions, String input) {
