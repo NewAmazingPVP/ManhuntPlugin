@@ -39,10 +39,11 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        manhuntPlugin = this;
         getServer().getPluginManager().registerEvents(this, this);
         getCommand("manhunt").setExecutor(new ManhuntCommand(this));
+        getCommand("manhunt").setTabCompleter(new ManhuntTabCompleter());
         compass = new Compass(this);
-        manhuntPlugin = this;
         new Utils(this);
     }
 
@@ -95,8 +96,10 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
         hunters = new ArrayList<>(newHunters);
         runner = newRunner;
-        runner.setMaxHealth(runnerMaxHealth);
+        runner.setMaxHealth(runnerMaxHealth*2.0);
+
         gameInProgress = true;
+        compass.playerLastLocation.addTrackingPlayer(runner);
 
         World overworld = Bukkit.getWorlds().get(0);
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -105,7 +108,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
         for (Player hunter : hunters) {
             hunter.getInventory().addItem(new ItemStack(Material.COMPASS));
-            hunter.setMaxHealth(hunterMaxHealth);
+            hunter.setMaxHealth(hunterMaxHealth*2.0);
             compass.setTrackingPlayers(hunter.getUniqueId(), runner.getUniqueId());
         }
 

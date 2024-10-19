@@ -30,14 +30,13 @@ public class Compass implements Listener {
     public BukkitTask compassTask;
 
     private final ManhuntPlugin plugin;
-    private PlayerLastLocation playerLastLocation;
+    public PlayerLastLocation playerLastLocation;
 
     public Compass(ManhuntPlugin plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
         compassUpdate();
         playerLastLocation = new PlayerLastLocation();
-        playerLastLocation.addTrackingPlayer(plugin.getRunner());
     }
 
     @EventHandler

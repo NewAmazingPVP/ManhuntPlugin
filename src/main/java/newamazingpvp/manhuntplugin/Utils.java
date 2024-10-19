@@ -38,13 +38,9 @@ public class Utils implements Listener {
     public void onEntityDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player p && plugin.isGameInProgress()) {
             if(plugin.getRunner().equals(p)) {
-                if (runnerResistance > 0) {
                     e.setDamage(e.getDamage() * (1 - (runnerResistance/100.0)));
-                }
             } else if (plugin.getHunters().contains(p)) {
-                if (hunterResistance > 0) {
                     e.setDamage(e.getDamage() * (1 - (hunterResistance/100.0)));
-                }
             }
         }
     }

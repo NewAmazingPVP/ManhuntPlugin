@@ -20,11 +20,11 @@ import static newamazingpvp.manhuntplugin.WorldManager.regenerateWorlds;
 public class ManhuntCommand implements CommandExecutor {
 
     private final ManhuntPlugin plugin;
-    public static double piglinBoost;
-    public static double runnerMaxHealth;
-    public static double hunterMaxHealth;
-    public static double runnerResistance;
-    public static double hunterResistance;
+    public static double piglinBoost = 0.0;
+    public static double runnerMaxHealth = 10.0;
+    public static double hunterMaxHealth = 20.0;
+    public static double runnerResistance = 0.0;
+    public static double hunterResistance = 0.0;
 
     public ManhuntCommand(ManhuntPlugin plugin) {
         this.plugin = plugin;
@@ -51,23 +51,27 @@ public class ManhuntCommand implements CommandExecutor {
                     return true;
                 }
                 startGame(player, args);
+                player.sendMessage("Game started successfully.");
                 break;
             case "end":
                 if (!plugin.isGameInProgress()) {
                     player.sendMessage("No game is currently in progress.");
                     return true;
                 }
-                if(Bukkit.getOnlinePlayers().size() > 1) {
+                if (Bukkit.getOnlinePlayers().size() > 1) {
                     player.sendMessage("You can't end the game while there are still players online.");
                     return true;
                 }
                 plugin.endGame(null);
+                player.sendMessage("Game ended successfully.");
                 break;
             case "list":
                 listPlayers(player);
+                player.sendMessage("Listed players successfully.");
                 break;
             case "compass":
                 addItemOrDrop(player, new ItemStack(Material.COMPASS), "Your inventory is full. The compass has been dropped on the ground.");
+                player.sendMessage("Compass given successfully.");
                 break;
             case "regen":
                 if (plugin.isGameInProgress()) {
@@ -75,6 +79,7 @@ public class ManhuntCommand implements CommandExecutor {
                     return true;
                 }
                 regenerateWorlds();
+                player.sendMessage("World regenerated successfully.");
                 break;
             case "add":
                 if (args.length != 2) {
@@ -82,6 +87,7 @@ public class ManhuntCommand implements CommandExecutor {
                     return true;
                 }
                 plugin.getHunters().add(Bukkit.getPlayer(args[1]));
+                player.sendMessage("Hunter added successfully.");
                 break;
             case "remove":
                 if (args.length != 2) {
@@ -89,39 +95,45 @@ public class ManhuntCommand implements CommandExecutor {
                     return true;
                 }
                 plugin.getHunters().remove(Bukkit.getPlayer(args[1]));
+                player.sendMessage("Hunter removed successfully.");
                 break;
-            case "piglinboost":
+            case "piglindrop":
                 if (args.length != 2) {
                     player.sendMessage("Usage: /manhunt piglinBoost %");
                     return true;
                 }
                 piglinBoost = Double.parseDouble(args[1]);
+                player.sendMessage("Piglin drop rate set successfully.");
                 break;
             case "setmaxhealth":
                 if (args.length != 3) {
                     player.sendMessage("Usage: /manhunt setMaxHealth <runner/hunter> <health>");
                     return true;
                 }
-                if(args[1].equalsIgnoreCase("runner")) {
+                if (args[1].equalsIgnoreCase("runner")) {
                     runnerMaxHealth = Double.parseDouble(args[2]);
-                } else if(args[1].equalsIgnoreCase("hunter")) {
+                } else if (args[1].equalsIgnoreCase("hunter")) {
                     hunterMaxHealth = Double.parseDouble(args[2]);
                 } else {
                     player.sendMessage("Usage: /manhunt setMaxHealth <runner/hunter> <health>");
+                    return true;
                 }
+                player.sendMessage("Max health set successfully.");
                 break;
             case "setresistance":
                 if (args.length != 3) {
                     player.sendMessage("Usage: /manhunt setResistance <runner/hunter> %");
                     return true;
                 }
-                if(args[1].equalsIgnoreCase("runner")) {
+                if (args[1].equalsIgnoreCase("runner")) {
                     runnerResistance = Double.parseDouble(args[2]);
-                } else if(args[1].equalsIgnoreCase("hunter")) {
+                } else if (args[1].equalsIgnoreCase("hunter")) {
                     hunterResistance = Double.parseDouble(args[2]);
                 } else {
                     player.sendMessage("Usage: /manhunt setResistance <runner/hunter> %");
+                    return true;
                 }
+                player.sendMessage("Resistance set successfully.");
                 break;
             default:
                 sendUsage(player);
