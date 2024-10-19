@@ -15,7 +15,8 @@ import static newamazingpvp.manhuntplugin.ManhuntCommand.*;
 
 public class Utils implements Listener {
 
-    private ManhuntPlugin plugin;
+    private final ManhuntPlugin plugin;
+
     public Utils(ManhuntPlugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         this.plugin = plugin;
@@ -28,7 +29,7 @@ public class Utils implements Listener {
             double chance = piglinBoost;
             if (rand < chance) {
                 e.setCancelled(true);
-                ItemStack ep = new ItemStack(Material.ENDER_PEARL, (int)(Math.random()*3)+2);
+                ItemStack ep = new ItemStack(Material.ENDER_PEARL, (int) (Math.random() * 3) + 2);
                 e.getEntity().getWorld().dropItemNaturally(e.getEntity().getLocation(), ep);
             }
         }
@@ -37,10 +38,10 @@ public class Utils implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player p && plugin.isGameInProgress()) {
-            if(plugin.getRunner().equals(p)) {
-                    e.setDamage(e.getDamage() * (1 - (runnerResistance/100.0)));
+            if (plugin.getRunner().equals(p)) {
+                e.setDamage(e.getDamage() * (1 - (runnerResistance / 100.0)));
             } else if (plugin.getHunters().contains(p)) {
-                    e.setDamage(e.getDamage() * (1 - (hunterResistance/100.0)));
+                e.setDamage(e.getDamage() * (1 - (hunterResistance / 100.0)));
             }
         }
     }

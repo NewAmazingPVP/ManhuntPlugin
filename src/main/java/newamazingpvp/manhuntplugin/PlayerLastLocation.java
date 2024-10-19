@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -16,7 +15,7 @@ public class PlayerLastLocation {
     private final HashMap<UUID, Location> lastNetherLocations = new HashMap<>();
     private final HashMap<UUID, Location> lastEndLocations = new HashMap<>();
 
-    public PlayerLastLocation(){
+    public PlayerLastLocation() {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -45,7 +44,7 @@ public class PlayerLastLocation {
         }.runTaskTimerAsynchronously(manhuntPlugin, 0, 20);
     }
 
-    public void addTrackingPlayer(Player player){
+    public void addTrackingPlayer(Player player) {
         lastOverworldLocations.put(player.getUniqueId(), null);
         lastNetherLocations.put(player.getUniqueId(), null);
         lastEndLocations.put(player.getUniqueId(), null);
@@ -63,26 +62,26 @@ public class PlayerLastLocation {
         lastEndLocations.put(playerUUID, location);
     }
 
-    public Location getLastOverworldLocation(UUID playerUUID){
+    public Location getLastOverworldLocation(UUID playerUUID) {
         return lastOverworldLocations.get(playerUUID);
     }
 
-    public Location getLastNetherLocation(UUID playerUUID){
+    public Location getLastNetherLocation(UUID playerUUID) {
         return lastNetherLocations.get(playerUUID);
     }
 
-    public Location getLastEndLocation(UUID playerUUID){
+    public Location getLastEndLocation(UUID playerUUID) {
         return lastEndLocations.get(playerUUID);
     }
 
-    public Location getSameDimensionLocation(UUID targetUUID, Player player){
-        if(player.getWorld().getName().equals("world")) return lastOverworldLocations.get(targetUUID);
-        if(player.getWorld().getName().equals("world_nether")) return lastNetherLocations.get(targetUUID);
-        if(player.getWorld().getName().equals("world_the_end")) return lastEndLocations.get(targetUUID);
+    public Location getSameDimensionLocation(UUID targetUUID, Player player) {
+        if (player.getWorld().getName().equals("world")) return lastOverworldLocations.get(targetUUID);
+        if (player.getWorld().getName().equals("world_nether")) return lastNetherLocations.get(targetUUID);
+        if (player.getWorld().getName().equals("world_the_end")) return lastEndLocations.get(targetUUID);
         return null;
     }
 
-    public void removeTrackingPlayer(UUID playerUUID){
+    public void removeTrackingPlayer(UUID playerUUID) {
         lastOverworldLocations.remove(playerUUID);
         lastNetherLocations.remove(playerUUID);
         lastEndLocations.remove(playerUUID);

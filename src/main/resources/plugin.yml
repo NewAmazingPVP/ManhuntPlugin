@@ -4,7 +4,7 @@ main: newamazingpvp.manhuntplugin.ManhuntPlugin
 api-version: '1.21'
 folia-supported: true
 commands:
-    manhunt:
-        description: Manhunt command
-        usage: /manhunt <help>
-        aliases: [mh]
+  manhunt:
+    description: Manhunt command
+    usage: /manhunt <help>
+    aliases: [ mh ]

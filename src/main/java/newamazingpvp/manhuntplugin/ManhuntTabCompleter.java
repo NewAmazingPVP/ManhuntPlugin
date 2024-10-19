@@ -27,18 +27,18 @@ public class ManhuntTabCompleter implements TabCompleter {
                 case "setresistance":
                     return filterSuggestions(Arrays.asList("runner", "hunter"), args[1]);
                 case "piglindrop":
-                    return Arrays.asList("%");
+                    return List.of("%");
                 default:
                     return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("setmaxhealth") || args[0].equalsIgnoreCase("setresistance")) {
-                return Arrays.asList("<value>");
+                return List.of("<value>");
             } else {
                 return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
             }
         }
-        return new Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+        return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
     }
 
     private List<String> filterSuggestions(List<String> suggestions, String input) {

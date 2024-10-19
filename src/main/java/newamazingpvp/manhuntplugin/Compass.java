@@ -1,19 +1,11 @@
 package newamazingpvp.manhuntplugin;
 
-import io.papermc.paper.event.entity.EntityPortalReadyEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPortalEnterEvent;
-import org.bukkit.event.entity.EntityPortalEvent;
-import org.bukkit.event.entity.EntityPortalExitEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
@@ -45,7 +37,7 @@ public class Compass implements Listener {
         lastPortalLocations.put(event.getPlayer().getUniqueId(), event.getFrom());
     }
 
-    public void checkLastLocation(){
+    public void checkLastLocation() {
 
     }
 
@@ -62,7 +54,7 @@ public class Compass implements Listener {
                     if (target == null) continue;
 
                     ItemStack compass = getCompassFromInventory(player);
-                    if (compass == null){
+                    if (compass == null) {
                         String warning = ChatColor.RED + "You need a compass to track runner. Do /manhunt compass to get one";
                         TextComponent textComponent = new TextComponent(warning);
                         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, textComponent);
