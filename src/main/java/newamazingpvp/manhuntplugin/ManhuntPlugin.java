@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static newamazingpvp.manhuntplugin.ManhuntCommand.hunterMaxHealth;
+import static newamazingpvp.manhuntplugin.ManhuntCommand.runnerMaxHealth;
 import static newamazingpvp.manhuntplugin.WorldManager.regenerateWorlds;
 
 public class ManhuntPlugin extends JavaPlugin implements Listener {
@@ -40,6 +43,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
         getCommand("manhunt").setExecutor(new ManhuntCommand(this));
         compass = new Compass(this);
         manhuntPlugin = this;
+        new Utils(this);
     }
 
     @Override
@@ -67,6 +71,15 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
     }
 
     @EventHandler
+    public void onJoin(PlayerJoinEvent event){
+        if (gameInProgress && !hunters.contains(event.getPlayer()) && !event.getPlayer().equals(runner)) {
+            event.getPlayer().kickPlayer(ChatColor.RED + "A manhunt game is currently in progress. Please wait for the next game or ask them to /manhunt add you.");
+        } else {
+            Bukkit.dispatchCommand(event.getPlayer(), "manhunt");
+        }
+    }
+
+    @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){
         if (event.getEntity().equals(runner)) {
             if(gameInProgress) {
@@ -82,6 +95,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
         hunters = new ArrayList<>(newHunters);
         runner = newRunner;
+        runner.setMaxHealth(runnerMaxHealth);
         gameInProgress = true;
 
         World overworld = Bukkit.getWorlds().get(0);
@@ -91,6 +105,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
         for (Player hunter : hunters) {
             hunter.getInventory().addItem(new ItemStack(Material.COMPASS));
+            hunter.setMaxHealth(hunterMaxHealth);
             compass.setTrackingPlayers(hunter.getUniqueId(), runner.getUniqueId());
         }
 

@@ -6,5 +6,5 @@ folia-supported: true
 commands:
     manhunt:
         description: Manhunt command
-        usage: /manhunt <start|end|list|compass>
+        usage: /manhunt <help>
         aliases: [mh]

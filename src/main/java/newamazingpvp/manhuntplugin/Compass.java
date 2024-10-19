@@ -30,17 +30,24 @@ public class Compass implements Listener {
     public BukkitTask compassTask;
 
     private final ManhuntPlugin plugin;
+    private PlayerLastLocation playerLastLocation;
 
     public Compass(ManhuntPlugin plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
         compassUpdate();
+        playerLastLocation = new PlayerLastLocation();
+        playerLastLocation.addTrackingPlayer(plugin.getRunner());
     }
 
     @EventHandler
     public void onPlayerPortalEvent(PlayerPortalEvent event) {
         //this doesnt work on folia, but it works on paper so remove lines from compass update for paper
         lastPortalLocations.put(event.getPlayer().getUniqueId(), event.getFrom());
+    }
+
+    public void checkLastLocation(){
+
     }
 
 
@@ -69,17 +76,19 @@ public class Compass implements Listener {
                         setNormalCompass(compass);
                         player.setCompassTarget(target.getLocation());
                         //below line only for folia (remove for paper)
-                        lastPortalLocations.put(target.getUniqueId(), target.getLocation());
+                        //lastPortalLocations.put(target.getUniqueId(), target.getLocation());
                     } else if (player.getWorld().getEnvironment() == target.getWorld().getEnvironment()) {
                         setLodestoneCompass(compass, target.getLocation());
                         //below line only for folia (remove for paper)
-                        lastPortalLocations.put(target.getUniqueId(), target.getLocation());
+                        //lastPortalLocations.put(target.getUniqueId(), target.getLocation());
                     } else {
-                        Location targetLocation = lastPortalLocations.get(target.getUniqueId());
-                        if (targetLocation != null && player.getWorld().getEnvironment() == targetLocation.getWorld().getEnvironment()) {
+                        //Location targetLocation = lastPortalLocations.get(target.getUniqueId());
+                        Location targetLocation = playerLastLocation.getSameDimensionLocation(target.getUniqueId(), player);
+                        if (targetLocation != null) {
                             setLodestoneCompass(compass, targetLocation);
+                            msg += "'s" + ChatColor.AQUA + " portal";
                         } else {
-                            msg = ChatColor.RED + "Cannot track player because they are in a different dimension and haven't used a portal yet";
+                            msg = ChatColor.RED + "Cannot track player in different dimension";
                         }
                     }
                     TextComponent textComponent = new TextComponent(msg);
