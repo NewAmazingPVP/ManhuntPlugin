@@ -22,6 +22,7 @@ public class WorldManager {
             world.setAutoSave(false);
         }
 
+        //TODO: Don't use a script, directly do it in the code itself to make it work anywhere
         try {
             File script = new File("/home/ubuntu/Manhunt/deleteFolders.sh");
 
