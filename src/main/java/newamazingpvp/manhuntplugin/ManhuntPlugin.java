@@ -43,9 +43,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        if (gameInProgress) {
-            endGame(null);
-        }
+        //regenerateWorlds();
     }
 
     public void endGame(String winnerType) {

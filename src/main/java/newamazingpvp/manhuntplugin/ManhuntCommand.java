@@ -75,7 +75,7 @@ public class ManhuntCommand implements CommandExecutor {
                     return true;
                 }
                 regenerateWorlds();
-                player.sendMessage("World regenerated successfully.");
+                //player.sendMessage("World regenerated successfully.");
                 break;
             case "add":
                 if (args.length != 2) {
