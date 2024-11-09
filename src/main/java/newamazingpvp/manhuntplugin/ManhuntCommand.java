@@ -20,7 +20,7 @@ public class ManhuntCommand implements CommandExecutor {
     private final ManhuntPlugin plugin;
     public static double piglinBoost = 0.0;
     public static double runnerMaxHealth = 10.0;
-    public static double hunterMaxHealth = 20.0;
+    public static double hunterMaxHealth = 10.0;
     public static double runnerResistance = 0.0;
     public static double hunterResistance = 0.0;
 
@@ -136,6 +136,14 @@ public class ManhuntCommand implements CommandExecutor {
                 plugin.getCompass().setTrackingPlayers(player.getUniqueId(), player.getUniqueId());
                 player.sendMessage("Tracking hunter successfully.");
                 break;
+            case "quicksettings":
+                piglinBoost = 30.0;
+                runnerMaxHealth = 20.0;
+                hunterMaxHealth = 20.0;
+                runnerResistance = 30.0;
+                hunterResistance = 0.0;
+                player.sendMessage("Quick settings applied successfully.");
+                break;
             default:
                 sendUsage(player);
                 break;
@@ -167,6 +175,7 @@ public class ManhuntCommand implements CommandExecutor {
         player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "setMaxHealth hunter <health>" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the max health for the hunters.");
         player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "setResistance runner %" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the resistance % from damage for the runner.");
         player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "setResistance hunter %" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Sets the resistance % from damage for the hunters.");
+        player.sendMessage(ChatColor.YELLOW + "/manhunt " + ChatColor.AQUA + "quicksettings" + ChatColor.WHITE + " - " + ChatColor.GREEN + "Applies quick settings for the game (30% piglin drop rate, 20 hearts health for runner and hunters, 30% resistance for runner and 0% resistance for hunters.");
     }
 
     private void startGame(Player player, String[] args) {
