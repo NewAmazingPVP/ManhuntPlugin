@@ -84,14 +84,30 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        if (gameInProgress && Bukkit.getOnlinePlayers().isEmpty()) {
-            getServer().getScheduler().runTaskLater(this, () -> {
-                if (Bukkit.getOnlinePlayers().isEmpty()) {
-                    endGame(null);
-                    regenerateWorlds();
-                }
-            }, 20 * 60 * 5);
-        }
+        getServer().getScheduler().runTaskLater(this, () -> {
+            if (gameInProgress && Bukkit.getOnlinePlayers().isEmpty()) {
+                getServer().getScheduler().runTaskLater(this, () -> {
+                    if (Bukkit.getOnlinePlayers().isEmpty()) {
+                        endGame(null);
+                        regenerateWorlds();
+                    }
+                }, 20 * 60 * 5);
+            }
+        }, 20);
+    }
+
+    @EventHandler
+    public void onPlayerKick(PlayerKickEvent event) {
+        getServer().getScheduler().runTaskLater(this, () -> {
+            if (gameInProgress && Bukkit.getOnlinePlayers().isEmpty()) {
+                getServer().getScheduler().runTaskLater(this, () -> {
+                    if (Bukkit.getOnlinePlayers().isEmpty()) {
+                        endGame(null);
+                        regenerateWorlds();
+                    }
+                }, 20 * 60 * 5);
+            }
+        }, 20);
     }
 
     @EventHandler
