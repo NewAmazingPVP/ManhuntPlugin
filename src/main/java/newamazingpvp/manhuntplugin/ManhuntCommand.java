@@ -131,6 +131,11 @@ public class ManhuntCommand implements CommandExecutor {
                 }
                 player.sendMessage("Resistance set successfully.");
                 break;
+            case "track":
+                plugin.compass.playerLastLocation.addTrackingPlayer(plugin.getRunner());
+                plugin.compass.setTrackingPlayers(player.getUniqueId(), player.getUniqueId());
+                player.sendMessage("Tracking hunter successfully.");
+                break;
             default:
                 sendUsage(player);
                 break;
@@ -139,7 +144,7 @@ public class ManhuntCommand implements CommandExecutor {
         return true;
     }
 
-    public void addItemOrDrop(Player player, ItemStack itemStack, String fullInventoryMessage) {
+    public static void addItemOrDrop(Player player, ItemStack itemStack, String fullInventoryMessage) {
         if (player.getInventory().firstEmpty() != -1) {
             player.getInventory().addItem(itemStack);
         } else {

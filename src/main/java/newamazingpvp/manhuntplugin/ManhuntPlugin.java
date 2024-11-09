@@ -17,8 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import static newamazingpvp.manhuntplugin.ManhuntCommand.hunterMaxHealth;
-import static newamazingpvp.manhuntplugin.ManhuntCommand.runnerMaxHealth;
+import static newamazingpvp.manhuntplugin.ManhuntCommand.*;
 import static newamazingpvp.manhuntplugin.WorldManager.regenerateWorlds;
 
 public class ManhuntPlugin extends JavaPlugin implements Listener {
@@ -27,7 +26,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
     private List<Player> hunters = new ArrayList<>();
     private Player runner = null;
 
-    private Compass compass;
+    Compass compass;
 
     public static ManhuntPlugin manhuntPlugin;
 
@@ -82,6 +81,8 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
             if (gameInProgress) {
                 endGame("Hunters");
             }
+        } else {
+            addItemOrDrop(event.getPlayer(), new ItemStack(Material.COMPASS), "Your inventory is full. The compass has been dropped on the ground.");
         }
     }
 
