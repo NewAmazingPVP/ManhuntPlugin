@@ -37,10 +37,6 @@ public class Compass implements Listener {
         lastPortalLocations.put(event.getPlayer().getUniqueId(), event.getFrom());
     }
 
-    public void checkLastLocation() {
-
-    }
-
 
     public void compassUpdate() {
         compassTask = new BukkitRunnable() {

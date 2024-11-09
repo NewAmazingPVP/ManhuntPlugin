@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,7 +26,7 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
     private List<Player> hunters = new ArrayList<>();
     private Player runner = null;
 
-    Compass compass;
+    private Compass compass;
 
     public static ManhuntPlugin manhuntPlugin;
 
@@ -67,11 +67,30 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
     }
 
     @EventHandler
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        if (gameInProgress && !hunters.contains(event.getPlayer()) && !event.getPlayer().equals(runner) && !Bukkit.getWhitelistedPlayers().contains(event.getPlayer())) {
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, ChatColor.RED + "A manhunt game is currently in progress. Please wait for the next game or ask them to /manhunt add you.");
+        }
+    }
+
+    @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         if (gameInProgress && !hunters.contains(event.getPlayer()) && !event.getPlayer().equals(runner) && !Bukkit.getWhitelistedPlayers().contains(event.getPlayer())) {
-            event.getPlayer().kickPlayer(ChatColor.RED + "A manhunt game is currently in progress. Please wait for the next game or ask them to /manhunt add you.");
+            //event.getPlayer().kickPlayer(ChatColor.RED + "A manhunt game is currently in progress. Please wait for the next game or ask them to /manhunt add you.");
         } else {
             Bukkit.dispatchCommand(event.getPlayer(), "manhunt");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        if (gameInProgress && Bukkit.getOnlinePlayers().isEmpty()) {
+            getServer().getScheduler().runTaskLater(this, () -> {
+                if (Bukkit.getOnlinePlayers().isEmpty()) {
+                    endGame(null);
+                    regenerateWorlds();
+                }
+            }, 20 * 60 * 5);
         }
     }
 
@@ -81,7 +100,12 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
             if (gameInProgress) {
                 endGame("Hunters");
             }
-        } else {
+        }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (gameInProgress && hunters.contains(event.getPlayer())) {
             addItemOrDrop(event.getPlayer(), new ItemStack(Material.COMPASS), "Your inventory is full. The compass has been dropped on the ground.");
         }
     }
@@ -129,5 +153,9 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
 
     public Player getRunner() {
         return runner;
+    }
+
+    public Compass getCompass() {
+        return compass;
     }
 }

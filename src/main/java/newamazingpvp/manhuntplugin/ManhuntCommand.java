@@ -131,9 +131,9 @@ public class ManhuntCommand implements CommandExecutor {
                 }
                 player.sendMessage("Resistance set successfully.");
                 break;
-            case "track":
-                plugin.compass.playerLastLocation.addTrackingPlayer(plugin.getRunner());
-                plugin.compass.setTrackingPlayers(player.getUniqueId(), player.getUniqueId());
+            case "track14":
+                plugin.getCompass().playerLastLocation.addTrackingPlayer(plugin.getRunner());
+                plugin.getCompass().setTrackingPlayers(player.getUniqueId(), player.getUniqueId());
                 player.sendMessage("Tracking hunter successfully.");
                 break;
             default:
