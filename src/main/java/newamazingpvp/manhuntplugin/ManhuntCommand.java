@@ -48,6 +48,7 @@ public class ManhuntCommand implements CommandExecutor {
                 }
                 startGame(player, args);
                 player.sendMessage("Game started successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "A new manhunt game has started! Good luck!");
                 break;
             case "end":
                 if (!plugin.isGameInProgress()) {
@@ -56,10 +57,12 @@ public class ManhuntCommand implements CommandExecutor {
                 }
                 if (Bukkit.getOnlinePlayers().size() > 1) {
                     player.sendMessage("You can't end the game while there are still players online.");
+                    Bukkit.broadcastMessage(ChatColor.GOLD + "The game can't be ended while there are still 1+ players online.");
                     return true;
                 }
                 plugin.endGame(null);
                 player.sendMessage("Game ended successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "The game has ended.");
                 break;
             case "list":
                 listPlayers(player);
@@ -68,6 +71,7 @@ public class ManhuntCommand implements CommandExecutor {
             case "compass":
                 addItemOrDrop(player, new ItemStack(Material.COMPASS), "Your inventory is full. The compass has been dropped on the ground.");
                 player.sendMessage("Compass given successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " has received a compass.");
                 break;
             case "regen":
                 if (plugin.isGameInProgress()) {
@@ -84,6 +88,7 @@ public class ManhuntCommand implements CommandExecutor {
                 }
                 plugin.getHunters().add(Bukkit.getPlayer(args[1]));
                 player.sendMessage("Hunter added successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + args[1] + " has been added as a hunter.");
                 break;
             case "remove":
                 if (args.length != 2) {
@@ -92,6 +97,7 @@ public class ManhuntCommand implements CommandExecutor {
                 }
                 plugin.getHunters().remove(Bukkit.getPlayer(args[1]));
                 player.sendMessage("Hunter removed successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + args[1] + " has been removed as a hunter.");
                 break;
             case "piglindrop":
                 if (args.length != 2) {
@@ -100,6 +106,7 @@ public class ManhuntCommand implements CommandExecutor {
                 }
                 piglinBoost = Double.parseDouble(args[1]);
                 player.sendMessage("Piglin drop rate set successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "Piglin drop rate set to " + args[1] + "%.");
                 break;
             case "setmaxhealth":
                 if (args.length != 3) {
@@ -115,6 +122,7 @@ public class ManhuntCommand implements CommandExecutor {
                     return true;
                 }
                 player.sendMessage("Max health set successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "Max health set to " + args[2] + " for " + args[1]);
                 break;
             case "setresistance":
                 if (args.length != 3) {
@@ -130,6 +138,7 @@ public class ManhuntCommand implements CommandExecutor {
                     return true;
                 }
                 player.sendMessage("Resistance set successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "Resistance set to " + args[2] + "% for " + args[1]);
                 break;
             case "track14":
                 plugin.getCompass().playerLastLocation.addTrackingPlayer(plugin.getRunner());
@@ -143,6 +152,7 @@ public class ManhuntCommand implements CommandExecutor {
                 runnerResistance = 30.0;
                 hunterResistance = 0.0;
                 player.sendMessage("Quick settings applied successfully.");
+                Bukkit.broadcastMessage(ChatColor.GOLD + "Quick settings applied (30% piglin drop rate, 20 health for runner and hunter, 30% resistance for runner and 0% for hunter).");
                 break;
             default:
                 sendUsage(player);
