@@ -13,6 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,6 +156,11 @@ public class ManhuntPlugin extends JavaPlugin implements Listener {
                 p.kickPlayer(ChatColor.RED + "A manhunt game is currently in progress. Please wait for the next game or ask them to /manhunt add you.");
             }
         }
+        Team team = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam("hunters");
+        for (Player hunter : hunters) {
+            team.addEntry(hunter.getName());
+        }
+        team.setAllowFriendlyFire(false);
 
         Bukkit.broadcastMessage("Manhunt game has started!");
     }
